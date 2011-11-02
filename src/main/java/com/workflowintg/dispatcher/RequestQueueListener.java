@@ -29,7 +29,7 @@ public class RequestQueueListener extends Thread {
 		while(process){
 			String message = queue.getMessage();
 			System.out.println("Processing: "+message);
-			Workflow w = wd.getWorkflowInstance();
+			Workflow w = wd.getWorkflowInstance(WorkflowIntg.class);
 			w = new WorkflowIntg(wd,w.getName());
 			((WorkflowIntg)w).setPartner("Partner_1");
 			w.addTask("parse", new TaskParse(w));
