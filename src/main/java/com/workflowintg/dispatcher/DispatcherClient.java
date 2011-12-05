@@ -25,6 +25,8 @@ public class DispatcherClient extends Thread implements WorkflowObserver{
 	public void run(){
 		try{
 			
+			this.setName("disptacher-client-thread");
+			
 			wd.subscribe(this);
 			
 			listener.start();
@@ -40,7 +42,9 @@ public class DispatcherClient extends Thread implements WorkflowObserver{
 		    	out.println("Recieved: "+inputLine);
 		    	queue.putMessage(inputLine);
 		    }
-		    
+		    //TODO Join workflow context threads 
+	    	listener.stopService();
+		    wd.getWorkflowDefinitionContext().finish();
 		    out.close();
 		    in.close();
 		    socket.close();

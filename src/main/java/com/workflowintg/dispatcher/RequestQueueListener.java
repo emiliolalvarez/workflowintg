@@ -1,10 +1,6 @@
 package com.workflowintg.dispatcher;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
 import com.workflow.task.TaskOnError;
-import com.workflow.workflow.Workflow;
 import com.workflow.workflow.WorkflowDefinition;
 import com.workflowintg.task.TaskDownloadImages;
 import com.workflowintg.task.TaskParse;
@@ -16,29 +12,35 @@ public class RequestQueueListener extends Thread {
 	
 	private RequestQueue queue;
 	private WorkflowDefinition wd;
-	private Executor executor;
 	private boolean process = true;
 	
 	public RequestQueueListener(WorkflowDefinition wd,RequestQueue queue){
+		this.setName("request-listener-thread");
 		this.queue = queue;
 		this.wd = wd;
-		executor = Executors.newFixedThreadPool(20);
 	}
 	
 	public void run(){
 		while(process){
 			String message = queue.getMessage();
-			System.out.println("Processing: "+message);
-			Workflow w = wd.getWorkflowInstance(WorkflowIntg.class);
-			w = new WorkflowIntg(wd,w.getName());
-			((WorkflowIntg)w).setPartner("Partner_1");
-			w.addTask("parse", new TaskParse(w));
-			w.addTask("validate", new TaskValidate(w));
-			w.addTask("download_images",new TaskDownloadImages(w));
-			w.addTask("submit", new TaskSubmit(w));
-			w.addTask("error", new TaskOnError(w));
-			executor.execute(w);
+			if(process){
+				System.out.println("Processing: "+message);
+				WorkflowIntg w = wd.getWorkflowInstance(WorkflowIntg.class);
+				w = new WorkflowIntg(wd,w.getName());
+				w.setPartner("Partner_1");
+				w.addTask("parse", new TaskParse(w));
+				w.addTask("validate", new TaskValidate(w));
+				w.addTask("download_images",new TaskDownloadImages(w));
+				w.addTask("submit", new TaskSubmit(w));
+				w.addTask("error", new TaskOnError(w));
+				wd.getWorkflowDefinitionContext().getExecutor("request-listener-executor").execute(w);
+			}
 		}
+	}
+	
+	public void stopService(){
+		this.process=false;
+		this.queue.putMessage("");
 	}
 	
 }

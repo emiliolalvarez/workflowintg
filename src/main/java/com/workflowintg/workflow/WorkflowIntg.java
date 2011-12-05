@@ -1,6 +1,5 @@
 package com.workflowintg.workflow;
 
-import com.google.inject.Inject;
 import com.workflow.workflow.Workflow;
 import com.workflow.workflow.WorkflowDefinition;
 

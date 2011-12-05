@@ -20,6 +20,8 @@ public class DispatcherServer {
 	
 	public void start(){
 		
+		Thread.currentThread().setName("dispatcher-server-thread");
+		
 		setUpWorkflowDefinition();
 		
 		try {
@@ -37,8 +39,6 @@ public class DispatcherServer {
 	}
 	
 	private void setUpWorkflowDefinition(){
-		//Injector injector = Guice.createInjector(new InjectionConfig()); 
-		//workflowDefinition.setInjector(injector);
 		workflowDefinition = new WorkflowDefinition(new WorkflowintgDefinitionContext());
 		workflowDefinition.addTransition(new Transition("parse", "success", "validate"));
 		workflowDefinition.addTransition(new Transition("validate", "success", "download_images"));
