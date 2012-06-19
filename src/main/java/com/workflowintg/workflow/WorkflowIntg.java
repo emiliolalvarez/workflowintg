@@ -1,11 +1,14 @@
 package com.workflowintg.workflow;
 
-import com.workflow.workflow.Workflow;
-import com.workflow.workflow.WorkflowDefinition;
+import com.myworkflow.workflow.Workflow;
+import com.myworkflow.workflow.WorkflowDefinition;
 
 public class WorkflowIntg extends Workflow {
 
 	private String partner;
+	
+	private PartnerContext context;
+	
 	
 	public WorkflowIntg(WorkflowDefinition workflowDefinition, String name) {
 		super(workflowDefinition, name);
@@ -17,6 +20,14 @@ public class WorkflowIntg extends Workflow {
 	
 	public String getPartner(){
 		return partner;
+	}
+	
+	public void setPartnerContext(PartnerContext context){
+		this.context = context;
+	}
+	
+	public PartnerContext getPartnerContext(){
+		return this.context;
 	}
 
 }

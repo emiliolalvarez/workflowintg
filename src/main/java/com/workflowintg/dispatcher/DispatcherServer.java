@@ -3,8 +3,8 @@ package com.workflowintg.dispatcher;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import com.workflow.transition.Transition;
-import com.workflow.workflow.WorkflowDefinition;
+import com.myworkflow.transition.Transition;
+import com.myworkflow.workflow.WorkflowDefinition;
 import com.workflowintg.context.WorkflowintgDefinitionContext;
 
 public class DispatcherServer {
@@ -39,8 +39,12 @@ public class DispatcherServer {
 	}
 	
 	private void setUpWorkflowDefinition(){
-		workflowDefinition = new WorkflowDefinition(new WorkflowintgDefinitionContext());
+		
+		workflowDefinition = new WorkflowDefinition(new WorkflowintgDefinitionContext("workflow.properties"));
+		workflowDefinition.addTransition(new Transition("download_file", "success", "parse"));
+		workflowDefinition.addTransition(new Transition("download_file", "error", "error"));
 		workflowDefinition.addTransition(new Transition("parse", "success", "validate"));
+		workflowDefinition.addTransition(new Transition("parse", "error", "error"));
 		workflowDefinition.addTransition(new Transition("validate", "success", "download_images"));
 		workflowDefinition.addTransition(new Transition("download_images","success","submit"));
 		workflowDefinition.addTransition(new Transition("submit","success",null));

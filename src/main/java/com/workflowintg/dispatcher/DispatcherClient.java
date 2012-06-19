@@ -5,9 +5,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import com.workflow.workflow.Workflow;
-import com.workflow.workflow.WorkflowDefinition;
-import com.workflow.workflow.WorkflowObserver;
+import com.myworkflow.workflow.Workflow;
+import com.myworkflow.workflow.WorkflowDefinition;
+import com.myworkflow.workflow.WorkflowObserver;
 
 public class DispatcherClient extends Thread implements WorkflowObserver{
 	
@@ -29,7 +29,7 @@ public class DispatcherClient extends Thread implements WorkflowObserver{
 			
 			wd.subscribe(this);
 			
-			listener.start();
+			new Thread(listener).start();
 			
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 		    BufferedReader in = new BufferedReader(
@@ -37,7 +37,7 @@ public class DispatcherClient extends Thread implements WorkflowObserver{
 					    socket.getInputStream()));
 	
 		    String inputLine;
-	
+		    
 		    while ((inputLine = in.readLine()) != null) {
 		    	out.println("Recieved: "+inputLine);
 		    	queue.putMessage(inputLine);
@@ -55,7 +55,6 @@ public class DispatcherClient extends Thread implements WorkflowObserver{
 		
 	}
 
-	@Override
 	public void notifyFinishedEvent(Workflow w) {
 		
 		System.out.println("++++++++++++++++++++++++++++++");

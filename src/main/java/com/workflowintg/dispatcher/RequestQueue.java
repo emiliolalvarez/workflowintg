@@ -15,16 +15,8 @@ public class RequestQueue {
 		queue.add(message);
 	}
 	
-	public String getMessage(){
-		
-		try {
-			return queue.take();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-		
+	public String getMessage() throws InterruptedException  {
+		return queue.take();
 	}
 
 }

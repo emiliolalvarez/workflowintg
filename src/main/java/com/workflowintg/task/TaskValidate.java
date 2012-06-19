@@ -1,8 +1,8 @@
 package com.workflowintg.task;
 
-import com.workflow.task.Task;
-import com.workflow.task.TaskResult;
-import com.workflow.workflow.Workflow;
+import com.myworkflow.TaskResult;
+import com.myworkflow.task.Task;
+import com.myworkflow.workflow.Workflow;
 
 public class TaskValidate extends Task {
 

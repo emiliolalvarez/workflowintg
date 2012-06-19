@@ -1,7 +1,8 @@
 package com.workflowintg.task;
 
-import com.workflow.task.TaskAsync;
-import com.workflow.task.TaskCallable;
+import com.myworkflow.task.TaskAsync;
+import com.myworkflow.task.TaskAsyncResult;
+import com.myworkflow.task.TaskCallable;
 
 public class DownloadImage extends TaskCallable{
 	
@@ -12,11 +13,10 @@ public class DownloadImage extends TaskCallable{
 		super(t);
 		this.t = t;
 		this.url = url;
-		
 	}
 
 	@Override
-	public TaskAsync call() {
+	public TaskAsyncResult call() {
 		long sleep = Math.round(Math.random() * 2000);
 		try {
 			Thread.sleep(sleep);
@@ -25,7 +25,7 @@ public class DownloadImage extends TaskCallable{
 			e.printStackTrace();
 		}
 		System.out.println("Downloaded "+url);
-		return t;
+		return new TaskAsyncResult("success",t,this);
 	}
 
 }

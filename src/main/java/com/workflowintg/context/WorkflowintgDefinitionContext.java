@@ -1,7 +1,9 @@
 package com.workflowintg.context;
 
-import com.workflow.workflow.WorkflowDefinitionContext;
+import com.myworkflow.workflow.WorkflowDefinitionContext;
 
 public class WorkflowintgDefinitionContext extends WorkflowDefinitionContext {
-
+	public WorkflowintgDefinitionContext(String propertiesFileName){
+		super(propertiesFileName);
+	}
 }

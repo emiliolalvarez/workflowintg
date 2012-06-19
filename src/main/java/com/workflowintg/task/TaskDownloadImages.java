@@ -1,7 +1,8 @@
 package com.workflowintg.task;
 
-import com.workflow.task.TaskAsync;
-import com.workflow.task.TaskResult;
+import com.myworkflow.TaskResult;
+import com.myworkflow.task.TaskAsync;
+import com.myworkflow.task.TaskAsyncResult;
 import com.workflowintg.workflow.WorkflowIntg;
 
 public class TaskDownloadImages extends TaskAsync{
@@ -16,9 +17,8 @@ public class TaskDownloadImages extends TaskAsync{
 	}
 
 	@Override
-	public void notifyAsyncTaskFinalization() {
+	public void notifyAsyncTaskFinalization(TaskAsyncResult r) {
 		this.incrementProcessed();
-		
 	}
 	
 	private synchronized void incrementProcessed(){
@@ -28,20 +28,20 @@ public class TaskDownloadImages extends TaskAsync{
 
 	@Override
 	public synchronized  TaskResult runTask() {
-		for(int i = 0;i<totalImages;i++){
-			w.getWorkflowDefinition().getWorkflowDefinitionContext()
-			.queueAsyncTask("images_"+w.getPartner(),
-					new DownloadImage("www.mydomain.com/image_"+i, this));
-			
-		}
-		
-		while (processed<totalImages){
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+//		for(int i = 0;i<totalImages;i++){
+//			w.getWorkflowDefinition().getWorkflowDefinitionContext()
+//			.queueAsyncTask("download-images",
+//					new DownloadImage("www.mydomain.com/image_"+i, this));
+//		}
+//		
+//		while (processed<totalImages){
+//			try {
+//				this.wait();
+//			} 
+//			catch (InterruptedException e) {
+//				break;
+//			}
+//		}
 		
 		return new TaskResult("success", "TaskDownloadImages finished");
 	}
