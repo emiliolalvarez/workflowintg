@@ -12,8 +12,7 @@ import org.xlightweb.client.HttpClient;
 import com.myworkflow.TaskResult;
 import com.myworkflow.task.Task;
 import com.myworkflow.workflow.Workflow;
-import com.workflowintg.workflow.PartnerContext;
-import com.workflowintg.workflow.WorkflowIntg;
+import com.workflowintg.partner.PartnerContext;
 
 public class TaskDownloadFile extends Task {
 
@@ -25,15 +24,16 @@ public class TaskDownloadFile extends Task {
 	@Override
 	public TaskResult runTask(){
 		try{
-			PartnerContext ctx = ((WorkflowIntg)this.getWorkflow()).getPartnerContext();
 			
-			IHttpRequest req = new GetRequest("http://acamargo.com/olx.xml");
+			PartnerContext context =(PartnerContext) this.getWorkflow().getContext();
+			IHttpRequest req = new GetRequest(context.getFileUrl());
 			HttpClient c = new HttpClient();
 			c.setMaxRedirects(5);
 			c.setMaxRetries(3);
 			c.setMaxIdle(5);
 			IHttpResponse resp = c.call(req);
-			String fileName = ctx.getFileName();
+			String fileName = "/tmp/parter-test.xml";
+			context.setLocalFile(fileName);
 			File f = new File(fileName);
 			 
 			if(!f.exists() && resp.hasBody()){

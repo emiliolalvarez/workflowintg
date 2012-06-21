@@ -20,7 +20,7 @@ public class StopResource {
 	@Produces({ MediaType.TEXT_PLAIN })
 	public String stop() {
 		
-		JettyDispatcherServer.workflowDefinition.getWorkflowDefinitionContext().finish();
+		JettyDispatcherServer.context.finish();
 		LOGGER.info("Stopping service");
 		return "Service Stopped!";
 	}

@@ -1,7 +1,8 @@
 package com.workflowintg.workflow;
 
 import com.myworkflow.workflow.Workflow;
-import com.myworkflow.workflow.WorkflowDefinition;
+import com.myworkflow.workflow.WorkflowApplicationContext;
+import com.workflowintg.partner.PartnerContext;
 
 public class WorkflowIntg extends Workflow {
 
@@ -10,8 +11,8 @@ public class WorkflowIntg extends Workflow {
 	private PartnerContext context;
 	
 	
-	public WorkflowIntg(WorkflowDefinition workflowDefinition, String name) {
-		super(workflowDefinition, name);
+	public WorkflowIntg(WorkflowApplicationContext context, String name) {
+		super(context, name);
 	}
 	
 	public void setPartner(String partner){

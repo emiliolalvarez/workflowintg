@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import org.eclipse.jetty.server.Server;
 
 import com.myworkflow.transition.Transition;
-import com.myworkflow.workflow.WorkflowDefinition;
+import com.myworkflow.workflow.TransitionDefinition;
 import com.workflowintg.Configuration;
 import com.workflowintg.context.WorkflowintgDefinitionContext;
 import com.workflowintg.db.DbPool;
@@ -16,14 +16,14 @@ public class JettyDispatcherServer{
 
 	public static RequestQueue requestQueue;
 	
-	public static WorkflowDefinition workflowDefinition;
+	public static WorkflowintgDefinitionContext context;
 	
 	public static void main(String args[]){
 		new JettyDispatcherServer().start();
 	}
 	
-	public WorkflowDefinition getWorkflowDefinition(){
-		return workflowDefinition;
+	public WorkflowintgDefinitionContext getWorkflowDefinition(){
+		return context;
 	}
 	
 	public void start(){
@@ -43,22 +43,10 @@ public class JettyDispatcherServer{
 		}
 	}
 	
-	public void setUpWorkflowDefinition(WorkflowintgDefinitionContext ctx){
-		workflowDefinition = new WorkflowDefinition(ctx);
- 	    workflowDefinition.addTransition(new Transition("download_file", "success", "parse"));
-		workflowDefinition.addTransition(new Transition("download_file", "error", "error"));
-		workflowDefinition.addTransition(new Transition("parse", "success", "validate"));
-		workflowDefinition.addTransition(new Transition("parse", "error", "error"));
-		workflowDefinition.addTransition(new Transition("validate", "success", "download_images"));
-		workflowDefinition.addTransition(new Transition("download_images","success","submit"));
-		workflowDefinition.addTransition(new Transition("submit","success",null));
-		workflowDefinition.addTransition(new Transition("error",null,null));
-	}
-	
 	public void launchListeners(WorkflowintgDefinitionContext ctx){
 		int size = ctx.getWorkflowDefintionProperties().getIntProperty("executor.size.request-queue-listener");
 		for(int i=0;i<size;i++){
-			ctx.queueExecutorTask("request-queue-listener", new RequestQueueListener(workflowDefinition, requestQueue ));
+			ctx.queueExecutorTask("request-queue-listener", new RequestQueueListener(ctx, requestQueue ));
 		}
 	}
 }

@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.workflowintg.dispatcher.JettyDispatcherServer;
 import com.workflowintg.dispatcher.rest.GuiceServletConfig;
+import com.workflowintg.partner.PartnerSession;
 
 public class Main extends Thread {
 	
@@ -24,6 +25,13 @@ public class Main extends Thread {
 		new JettyDispatcherServer().start();
 		config = GuiceServletConfig.getDependencyInjector().getInstance(Configuration.class);
 		LOGGER.info(config.getString("database.driver"));
+	
+		//Launch test partner session;
+		PartnerSession ps = new PartnerSession("mypartner");
+		Thread t = new Thread(ps);
+		t.setName(ps.getPartnerName());
+		t.start();
+	
 	}
 	
 	public void setUpDependencyConfiguration(){
