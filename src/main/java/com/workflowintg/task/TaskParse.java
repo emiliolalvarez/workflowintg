@@ -15,6 +15,7 @@ import org.jsoup.parser.Parser;
 import com.myworkflow.TaskResult;
 import com.myworkflow.task.Task;
 import com.myworkflow.workflow.Workflow;
+import com.workflowintg.dispatcher.JettyDispatcherServer;
 import com.workflowintg.partner.PartnerContext;
 
 public class TaskParse extends Task {
@@ -74,11 +75,12 @@ public class TaskParse extends Task {
 					if(element.equals("ad")){
 						Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
 						for(Element e:doc.select("picture>picture_url")){
-							LOGGER.info("Image: "+e.text());
+//							LOGGER.info("Image: "+e.text());
 						}
 						for(Element e:doc.select("ID")){
-							LOGGER.info("ID: "+e.text());
+//							LOGGER.info("ID: "+e.text());
 						}
+						JettyDispatcherServer.getRequestQueue().putMessage(xml);
 						xml="";
 					}
 				}

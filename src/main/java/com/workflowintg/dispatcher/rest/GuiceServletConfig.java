@@ -5,14 +5,23 @@ import java.util.Map;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.name.Names;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
+import com.myworkflow.main.Configuration;
+import com.myworkflow.workflow.TransitionDefinition;
+import com.myworkflow.workflow.WorkflowApplicationContext;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.core.util.FeaturesAndProperties;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
-import com.workflowintg.Configuration;
+import com.workflowintg.context.AdContext;
+import com.workflowintg.context.AdContextProvider;
+import com.workflowintg.context.AdTransitionDefinition;
 import com.workflowintg.db.DbPool;
+import com.workflowintg.dispatcher.RequestQueue;
+import com.workflowintg.partner.PartnerContext;
+import com.workflowintg.partner.PartnerTransitionDefinition;
 
 public class GuiceServletConfig extends GuiceServletContextListener {
 	private static Injector injector;
@@ -40,6 +49,11 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 				//Other
 				bind(Configuration.class).asEagerSingleton();
 				bind(DbPool.class).asEagerSingleton();
+				bind(TransitionDefinition.class).annotatedWith(Names.named("Partner")).to(PartnerTransitionDefinition.class).asEagerSingleton();
+				bind(TransitionDefinition.class).annotatedWith(Names.named("Ad")).to(AdTransitionDefinition.class).asEagerSingleton();
+				bind(AdContext.class).toProvider(AdContextProvider.class);
+				bind(RequestQueue.class).asEagerSingleton();
+				
 				Map<String, String> params = new HashMap<String, String>();
 				
 				//Tell Jersey to scan the package
