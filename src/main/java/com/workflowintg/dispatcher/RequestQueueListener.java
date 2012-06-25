@@ -2,12 +2,13 @@ package com.workflowintg.dispatcher;
 
 import com.myworkflow.TaskOnError;
 import com.myworkflow.workflow.WorkflowApplicationContext;
+import com.workflowintg.ad.AdWorkflow;
+import com.workflowintg.partner.PartnerAd;
 import com.workflowintg.task.TaskDownloadFile;
 import com.workflowintg.task.TaskDownloadImages;
 import com.workflowintg.task.TaskParse;
 import com.workflowintg.task.TaskSubmit;
 import com.workflowintg.task.TaskValidate;
-import com.workflowintg.workflow.WorkflowIntg;
 
 public class RequestQueueListener implements Runnable {
 	
@@ -25,13 +26,12 @@ public class RequestQueueListener implements Runnable {
 		System.out.println("Request Queue Listener launched!");
 		while(process){
 			try{
-			    String message = queue.getMessage();
+				PartnerAd message = queue.getMessage();
 			    if(message != null){
-			    	System.out.println("Processing: "+message);
-					WorkflowIntg w = context.getWorkflowInstance(WorkflowIntg.class);
-					w.setPartner("Partner_1");
-					w.addTask("download_file", new TaskDownloadFile(w));
-					w.addTask("parse", new TaskParse(w));
+			    	//System.out.println("Processing: "+message);
+					AdWorkflow w = context.getWorkflowInstance(AdWorkflow.class);
+					w.setAd(message);
+					w.setPartner(message.getPartner());
 					w.addTask("validate", new TaskValidate(w));
 					w.addTask("download_images",new TaskDownloadImages(w));
 					w.addTask("submit", new TaskSubmit(w));
@@ -49,7 +49,7 @@ public class RequestQueueListener implements Runnable {
 	
 	public void stopService(){
 		this.process=false;
-		this.queue.putMessage("");
+		this.queue.putMessage(null);
 	}
 	
 }

@@ -1,13 +1,14 @@
-package com.workflowintg.task;
+package com.workflowintg.utils;
 
-import org.xlightweb.client.HttpClientConnection;
+import org.xlightweb.client.HttpClient;
 
 public class ConnectionWrapper{
+	
 	private boolean isInUse = false;
 	
-	private HttpClientConnection conn = null;
+	private HttpClient conn = null;
 	
-	public ConnectionWrapper(HttpClientConnection conn){
+	public ConnectionWrapper(HttpClient conn){
 		this.conn = conn;
 	}
 	
@@ -19,7 +20,7 @@ public class ConnectionWrapper{
 		return isInUse;
 	}
 	
-	public HttpClientConnection getConnection(){
+	public HttpClient getConnection(){
 		return conn;
 	}
 	

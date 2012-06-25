@@ -1,6 +1,6 @@
 package com.workflowintg.dispatcher.rest.resources;
 
-import java.util.Date;
+//import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.myworkflow.main.Configuration;
-import com.workflowintg.dispatcher.JettyDispatcherServer;
+//import com.workflowintg.dispatcher.JettyDispatcherServer;
 
 @Path("/status")
 @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -24,7 +24,7 @@ public class StatusResource {
 	@GET
 	@Produces({ MediaType.TEXT_PLAIN })
 	public String currentStatus() {
-		JettyDispatcherServer.getRequestQueue().putMessage(""+new Date().getTime());
+		//JettyDispatcherServer.getRequestQueue().putMessage(""+new Date().getTime());
 		LOGGER.debug("Returning current status");
 		return "GOOD!!"+c.getString("database.driver");
 	}

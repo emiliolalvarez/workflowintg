@@ -28,6 +28,7 @@ public class TaskDownloadFile extends Task {
 			PartnerContext context =(PartnerContext) this.getWorkflow().getContext();
 			IHttpRequest req = new GetRequest(context.getFileUrl());
 			HttpClient c = new HttpClient();
+			
 			c.setMaxRedirects(5);
 			c.setMaxRetries(3);
 			c.setMaxIdle(5);

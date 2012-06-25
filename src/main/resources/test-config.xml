@@ -1,0 +1,279 @@
+ <?xml version="1.0" ?><partner active="true" delta="false" frequency="86400" ignoreWarning="false" name="gestionaleimmobiliare" skipImageHash="false">
+  <fileLink csvFieldSeparator="," csvHeaderLine="1" csvTextSeparator="&quot;" download="true" encoding="UTF-8" replaceLineBreak="false" type="xml"><![CDATA[http://www.gestionaleimmobiliare.it/export/xml/trovit_com/prossima-casa_it.xml]]></fileLink>
+  <dateFormat auto="false"/>
+  <priority><![CDATA[100]]></priority>
+  <replaces/>
+  <notes><![CDATA[ads:
+complete
+landing page ready - will be uploaded with release on Oct. 20]]></notes>
+  <map>
+    <tag required="false" type="root">
+      <parameter csvPos="" name="trovit"/>
+      <template/>
+    </tag>
+    <tag required="false" type="feed">
+      <parameter csvPos="" name="AD"/>
+      <template/>
+    </tag>
+    <tag required="true" type="id">
+      <parameter csvPos="" name="ID"/>
+      <template/>
+    </tag>
+    <tag required="false" type="status">
+      <parameter csvPos="" name="STATUS"/>
+      <template/>
+    </tag>
+    <tag required="true" type="title">
+      <parameter csvPos="" name="TITLE"/>
+      <template/>
+    </tag>
+    <tag required="true" type="description">
+      <parameter csvPos="" name="content"/>
+      <parameter csvPos="" name="agency"/>
+      <template><![CDATA[<cond param="content"><param name="content"/><br/><br/></cond>
+<cond param="agency">Agenzia: <param name="agency"/><br/></cond>
+]]></template>
+    </tag>
+    <tag required="true" type="date">
+      <parameter csvPos="" name="DATE"/>
+      <template/>
+    </tag>
+    <tag required="false" type="expire_date">
+      <template/>
+    </tag>
+    <tag required="true" type="email">
+      <parameter csvPos="" name="EMAIL"/>
+      <template><![CDATA[feeds@olx.com]]></template>
+    </tag>
+    <tag required="false" type="phone">
+      <template/>
+    </tag>
+    <tag required="false" type="address">
+      <parameter csvPos="" name="ADDRESS"/>
+      <template/>
+    </tag>
+    <tag required="false" type="zip_code">
+      <parameter csvPos="" name="ZIP_CODE"/>
+      <template/>
+    </tag>
+    <tag required="true" type="location_country">
+      <parameter csvPos="" name="LOCATION_COUNTRY"/>
+      <template><![CDATA[IT]]></template>
+    </tag>
+    <tag required="false" type="location_state">
+      <parameter csvPos="" name="region"/>
+      <template><![CDATA[<cond param="region" value="Agrigento" exclusive="true">SIC</cond>
+<cond param="region" value="Alessandria" exclusive="true">PIE</cond>
+<cond param="region" value="Ancona" exclusive="true">MAR</cond>
+<cond param="region" value="Arezzo" exclusive="true">TOS</cond>
+<cond param="region" value="Ascoli Piceno" exclusive="true">MAR</cond>
+<cond param="region" value="Asti" exclusive="true">PIE</cond>
+<cond param="region" value="Avellino" exclusive="true">CMP</cond>
+<cond param="region" value="Bari" exclusive="true">APL</cond>
+<cond param="region" value="Belluno" exclusive="true">VEN</cond>
+<cond param="region" value="Benevento" exclusive="true">CMP</cond>
+<cond param="region" value="Bergamo" exclusive="true">LBY</cond>
+<cond param="region" value="Biella" exclusive="true">PIE</cond>
+<cond param="region" value="Bologna" exclusive="true">ERO</cond>
+<cond param="region" value="Brescia" exclusive="true">LBY</cond>
+<cond param="region" value="Brindisi" exclusive="true">APL</cond>
+<cond param="region" value="Cagliari" exclusive="true">SAR</cond>
+<cond param="region" value="Caltanissetta" exclusive="true">SIC</cond>
+<cond param="region" value="Campobasso" exclusive="true">MOL</cond>
+<cond param="region" value="Carbonia" exclusive="true">SAR</cond>
+<cond param="region" value="Iglesias" exclusive="true">SAR</cond>
+<cond param="region" value="Caserta" exclusive="true">CMP</cond>
+<cond param="region" value="Catania" exclusive="true">SIC</cond>
+<cond param="region" value="Catanzaro" exclusive="true">CAL</cond>
+<cond param="region" value="Chieti" exclusive="true">ABZ</cond>
+<cond param="region" value="Como" exclusive="true">LBY</cond>
+<cond param="region" value="Cosenza" exclusive="true">CAL</cond>
+<cond param="region" value="Cremona" exclusive="true">LBY</cond>
+<cond param="region" value="Crotone" exclusive="true">CAL</cond>
+<cond param="region" value="Cuneo" exclusive="true">PIE</cond>
+<cond param="region" value="Enna" exclusive="true">SIC</cond>
+<cond param="region" value="Ferrara" exclusive="true">ERO</cond>
+<cond param="region" value="Firenze" exclusive="true">TOS</cond>
+<cond param="region" value="Foggia" exclusive="true">APL</cond>
+<cond param="region" value="Forli" exclusive="true">ERO</cond>
+<cond param="region" value="Frosinone" exclusive="true">LAZ</cond>
+<cond param="region" value="Genova" exclusive="true">LGU</cond>
+<cond param="region" value="Gorizia" exclusive="true">FVG</cond>
+<cond param="region" value="Grosseto" exclusive="true">TOS</cond>
+<cond param="region" value="Imperia" exclusive="true">LGU</cond>
+<cond param="region" value="Isernia" exclusive="true">MOL</cond>
+<cond param="region" value="L’Aquila" exclusive="true">ABZ</cond>
+<cond param="region" value="La Spezia" exclusive="true">LGU</cond>
+<cond param="region" value="Latina" exclusive="true">LAZ</cond>
+<cond param="region" value="Lecce" exclusive="true">APL</cond>
+<cond param="region" value="Lecco" exclusive="true">LBY</cond>
+<cond param="region" value="Livorno" exclusive="true">TOS</cond>
+<cond param="region" value="Lodi" exclusive="true">LBY</cond>
+<cond param="region" value="Lucca" exclusive="true">TOS</cond>
+<cond param="region" value="Macerata" exclusive="true">MAR</cond>
+<cond param="region" value="Mantova" exclusive="true">LBY</cond>
+<cond param="region" value="Massa" exclusive="true">TOS</cond>
+
+<cond param="region" value="Matera" exclusive="true">BAS</cond>
+<cond param="region" value="Medio Campidano" exclusive="true">SAR</cond>
+<cond param="region" value="Messina" exclusive="true">SIC</cond>
+<cond param="region" value="Milano" exclusive="true">LBY</cond>
+<cond param="region" value="Modena" exclusive="true">ERO</cond>
+<cond param="region" value="Napoli" exclusive="true">CMP</cond>
+<cond param="region" value="Novara" exclusive="true">PIE</cond>
+<cond param="region" value="Nuoro" exclusive="true">SAR</cond>
+<cond param="region" value="Ogliastra" exclusive="true">SAR</cond>
+<cond param="region" value="Olbia" exclusive="true">SAR</cond>
+<cond param="region" value="Oristano" exclusive="true">SAR</cond>
+<cond param="region" value="Padova" exclusive="true">VEN</cond>
+<cond param="region" value="Palermo" exclusive="true">SIC</cond>
+<cond param="region" value="Parma" exclusive="true">ERO</cond>
+<cond param="region" value="Pavia" exclusive="true">LBY</cond>
+<cond param="region" value="Perugia" exclusive="true">UMB</cond>
+<cond param="region" value="Pesaro" exclusive="true">MAR</cond>
+<cond param="region" value="Pescara" exclusive="true">ABZ</cond>
+<cond param="region" value="Piacenza" exclusive="true">ERO</cond>
+<cond param="region" value="Pisa" exclusive="true">TOS</cond>
+<cond param="region" value="Pistoia" exclusive="true">TOS</cond>
+<cond param="region" value="Pordenone" exclusive="true">FVG</cond>
+<cond param="region" value="Potenza" exclusive="true">BAS</cond>
+<cond param="region" value="Prato" exclusive="true">TOS</cond>
+<cond param="region" value="Ragusa" exclusive="true">SIC</cond>
+<cond param="region" value="Ravenna" exclusive="true">ERO</cond>
+<cond param="region" value="Reggio Calabria" exclusive="true">CAL</cond>
+<cond param="region" value="Reggio Emilia" exclusive="true">ERO</cond>
+<cond param="region" value="Rieti" exclusive="true">LAZ</cond>
+<cond param="region" value="Rimini" exclusive="true">ERO</cond>
+<cond param="region" value="Roma" exclusive="true">LAZ</cond>
+<cond param="region" value="Rovigo" exclusive="true">VEN</cond>
+<cond param="region" value="Salerno" exclusive="true">CMP</cond>
+<cond param="region" value="Sassari" exclusive="true">SAR</cond>
+<cond param="region" value="Savona" exclusive="true">LGU</cond>
+<cond param="region" value="Siena" exclusive="true">TOS</cond>
+<cond param="region" value="Siracusa" exclusive="true">SIC</cond>
+<cond param="region" value="Sondrio" exclusive="true">LBY</cond>
+<cond param="region" value="Taranto" exclusive="true">APL</cond>
+<cond param="region" value="Teramo" exclusive="true">ABZ</cond>
+<cond param="region" value="Terni" exclusive="true">UMB</cond>
+<cond param="region" value="Torino" exclusive="true">PIE</cond>
+<cond param="region" value="Trapani" exclusive="true">SIC</cond>
+<cond param="region" value="Treviso" exclusive="true">VEN</cond>
+<cond param="region" value="Trieste" exclusive="true">FVG</cond>
+<cond param="region" value="Udine" exclusive="true">FVG</cond>
+<cond param="region" value="Varese" exclusive="true">LBY</cond>
+<cond param="region" value="Venezia" exclusive="true">VEN</cond>
+<cond param="region" value="Verbania" exclusive="true">PIE</cond>
+<cond param="region" value="Vercelli" exclusive="true">PIE</cond>
+<cond param="region" value="Verona" exclusive="true">VEN</cond>
+<cond param="region" value="Vibo Valentia" exclusive="true">CAL</cond>
+<cond param="region" value="Vicenza" exclusive="true">VEN </cond>
+<cond param="region" value="Viterbo" exclusive="true">LAZ</cond>
+
+
+]]></template>
+    </tag>
+    <tag required="false" type="location_city">
+      <parameter csvPos="" name="city"/>
+      <template/>
+    </tag>
+    <tag required="true" type="category">
+      <parameter csvPos="" name="type"/>
+      <template><![CDATA[<cond param="type" value="For sale" exclusive="true">367</cond>
+<cond param="type" value="For rent" exclusive="true">363</cond>
+]]></template>
+    </tag>
+    <tag required="false" type="image_url">
+      <parameter csvPos="" name="picture_url"/>
+      <template/>
+    </tag>
+    <tag required="false" type="price">
+      <parameter csvPos="" name="PRICE"/>
+      <template/>
+    </tag>
+    <tag required="false" type="currency">
+      <template/>
+    </tag>
+    <tag required="false" type="item_language">
+      <template/>
+    </tag>
+    <tag required="false" type="seller_type">
+      <parameter csvPos="" name="SELLER_TYPE"/>
+      <template><![CDATA[PRO]]></template>
+    </tag>
+    <tag required="false" type="seller_id">
+      <template><![CDATA[3582845]]></template>
+    </tag>
+    <tag required="false" type="item_ip">
+      <template/>
+    </tag>
+    
+    <tag required="false" type="cobranded">
+      <template/>
+    </tag>
+    <tag required="false" type="ad_type">
+      <template/>
+    </tag>
+    <tag required="true" type="data_domain_id">
+      <template><![CDATA[1]]></template>
+    </tag>
+    <tag required="false" type="condition">
+      <template/>
+    </tag>
+    <tag required="false" type="model">
+      <template/>
+    </tag>
+    <tag required="false" type="mileage">
+      <template/>
+    </tag>
+    <tag required="false" type="year">
+      <template/>
+    </tag>
+    <tag required="false" type="cartype">
+      <template/>
+    </tag>
+    <tag required="false" type="vinnumber">
+      <template/>
+    </tag>
+    <tag required="false" type="make">
+      <template/>
+    </tag>
+    <tag required="false" type="bedrooms">
+      <parameter csvPos="" name="rooms"/>
+      <template/>
+    </tag>
+    <tag required="false" type="bathrooms">
+      <template/>
+    </tag>
+    <tag required="false" type="pets">
+      <template/>
+    </tag>
+    <tag required="false" type="brokerfree">
+      <template/>
+    </tag>
+    <tag required="false" type="surface">
+      <parameter csvPos="" name="floor_area"/>
+      <template/>
+    </tag>
+    <tag required="false" type="companyname">
+      <template/>
+    </tag>
+    <tag required="false" type="positiontype">
+      <template/>
+    </tag>
+    <tag required="false" type="minimumexperience">
+      <template/>
+    </tag>
+    <tag required="false" type="maximumexperience">
+      <template/>
+    </tag>
+    <tag required="false" type="salarytype">
+      <template/>
+    </tag>
+    <tag required="false" type="maximumprice">
+      <template/>
+    </tag>
+  <tag required="false" type="reply_url">
+      <parameter csvPos="" name="id"/>
+      <template><![CDATA[land:http://www.prossima-casa.it/annuncio_<cond param="id"><param name="id"/><br/></cond>]]></template>
+    </tag></map>
+<contact_json><![CDATA[{"fields":{"user_email_simple":"{{ email }}","user_nome_cognome":"{{ name }}","user_recapito_telefonico":"{{ phone }}","contatta_agenzia_richiesta":"{{ comment }}","contatta_agenzia":"1","contatta_agenzia_button":"1","privacy_policy":"1"},"attach_field":"","test_url":"http:\\/\\/www.prossima-casa.it\\/annuncio_01ed3838b36d926e521c.html","test_partner_ad_id":"01ed3838b36d926e521c"}]]></contact_json></partner>

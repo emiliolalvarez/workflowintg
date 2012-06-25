@@ -15,7 +15,10 @@ import org.jsoup.parser.Parser;
 import com.myworkflow.TaskResult;
 import com.myworkflow.task.Task;
 import com.myworkflow.workflow.Workflow;
+import com.workflowintg.context.AdContext;
 import com.workflowintg.dispatcher.JettyDispatcherServer;
+import com.workflowintg.dispatcher.rest.GuiceServletConfig;
+import com.workflowintg.partner.PartnerAd;
 import com.workflowintg.partner.PartnerContext;
 
 public class TaskParse extends Task {
@@ -24,7 +27,7 @@ public class TaskParse extends Task {
 	private String current = "";
 	private int count = 0;
 	private String xml="";
-	
+	private TaskResult result = null;
 	private static Logger LOGGER = Logger.getLogger(TaskParse.class);
 	
 	
@@ -35,6 +38,11 @@ public class TaskParse extends Task {
 
 	@Override
 	public TaskResult runTask() {
+		
+		PartnerContext context = (PartnerContext)this.getWorkflow().getContext();
+		AdContext adContext = GuiceServletConfig.getDependencyInjector().getInstance(AdContext.class);
+		adContext.subscribe(context.getPartnerSession());
+		
 		// TODO Auto-generated method stub
 		try {
 			String fileName = ((PartnerContext)this.getWorkflow().getContext()).getLocalFileName();
@@ -73,23 +81,63 @@ public class TaskParse extends Task {
 						xml = xml+"</"+element+">\n";
 					}
 					if(element.equals("ad")){
-						Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
-						for(Element e:doc.select("picture>picture_url")){
-//							LOGGER.info("Image: "+e.text());
-						}
-						for(Element e:doc.select("ID")){
-//							LOGGER.info("ID: "+e.text());
-						}
-						JettyDispatcherServer.getRequestQueue().putMessage(xml);
+						count++;
+						enqueueAd(xml,context);
 						xml="";
+						if(count==1000)break;
 					}
 				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			return new TaskResult("success", "TaskParse failed");
+			result =  new TaskResult("success", "TaskParse failed");
 		}
-		return new TaskResult("success", "TaskParse finished");
+		result= result == null ? new TaskResult("success", "TaskParse finished") :result;
+		context.getPartnerSession().setParseFisnished();
+		return result;
+	}
+	
+	private void enqueueAd(String xml, PartnerContext context){
+		PartnerAd ad = new PartnerAd();
+		ad.setXml(xml);
+		ad.setPartner(context.getPartnerSession().getPartnerName());
+		applyTransformation(context, ad);
+		JettyDispatcherServer.getRequestQueue().putMessage(ad);
+		context.getPartnerSession().incrementTotal();
+	}
+	
+	private void applyTransformation(PartnerContext context, PartnerAd ad){
+		
+		Document config = context.getPartnerSession().getPartnerConfiguration();
+		Document doc = Jsoup.parse(ad.getXml(), "", Parser.xmlParser());
+		try{
+			for(Element e:config.select("map>tag")){
+				if(e.attr("type").equals("title")){
+					StringBuilder strValue = new StringBuilder();
+					for(Element param:e.select("parameter")){
+						strValue.append(doc.select(param.attr("name")).first().text()+"<br />");
+					}
+					ad.setTitle(strValue.toString());
+				}
+ 				else if(e.attr("type").equals("description")){
+					StringBuilder strValue = new StringBuilder();
+					for(Element param:e.select("parameter")){
+						strValue.append(doc.select(param.attr("name")).first().text()+"<br />");
+					}
+					ad.setDescription(strValue.toString());
+				}
+				else if(e.attr("type").equals("image_url")){
+					for(Element param:e.select("parameter")){
+						for(Element image:doc.select(param.attr("name"))){
+							ad.addImageUrl(image.text());
+						}
+					}
+				}
+			}	
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 }

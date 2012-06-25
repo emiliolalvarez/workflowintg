@@ -8,8 +8,9 @@ import com.myworkflow.workflow.WorkflowApplicationContext;
 
 public class PartnerContext extends WorkflowApplicationContext {
 	
-	String fileUrl;
-	String localFile;
+	private String fileUrl;
+	private String localFile;
+	private PartnerSession session;
 
 	@Inject
 	public PartnerContext(@Named("Partner")TransitionDefinition transition,Configuration configuration) {
@@ -22,6 +23,14 @@ public class PartnerContext extends WorkflowApplicationContext {
 	
 	public String getFileUrl(){
 		return fileUrl;
+	}
+	
+	public void setPartnerSession(PartnerSession session){
+		this.session = session;
+	}
+	
+	public PartnerSession getPartnerSession(){
+		return session;
 	}
 	
 	public void setLocalFile(String fileName){
