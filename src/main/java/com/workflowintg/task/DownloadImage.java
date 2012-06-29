@@ -3,13 +3,13 @@ package com.workflowintg.task;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.xlightweb.GetRequest;
 import org.xlightweb.IHttpRequest;
 import org.xlightweb.IHttpResponse;
-import org.xlightweb.client.HttpClient;
+import org.xlightweb.client.MyHttpClient;
 
 import com.myworkflow.task.TaskAsync;
 import com.myworkflow.task.TaskAsyncResult;
@@ -32,13 +32,16 @@ public class DownloadImage extends TaskCallable{
 	@Override
 	public TaskAsyncResult call() {
 		String fileName = null;
-		URL uri = null;
-		HttpClient c = null;
+		URI uri = null;
+		MyHttpClient c = null;
 		try {
-			uri = new URL(url);
+			uri = new URI(url);
 			fileName = "/tmp/"+((AdWorkflow)t.getWorkflow()).getPartner()+"-"+uri.getPath().replace("/", "");
+			
+		    LOGGER.info("Image ["+url+"] downloaded");
+			
 			IHttpRequest req = new GetRequest(url);
-			c = HttpConnectionPool.getConnectionPool(uri.getHost(), uri.getPort(),this).take();
+			c = HttpConnectionPool.getConnectionPool(uri.getHost(), uri.getPort()).take();
 			IHttpResponse resp = c.call(req);
 			File f = new File(fileName);
 			if(resp.hasBody()){
@@ -54,15 +57,15 @@ public class DownloadImage extends TaskCallable{
 		        is.close();
 		        LOGGER.info("Image ["+url+"] downloaded");
 			}
+			
 		} 
 		catch(Exception e){
 			LOGGER.error("Image ["+url+"] failed "+"\n"+fileName);
-			
 			e.printStackTrace();
 		}
-		if(uri!=null && c!=null){
-			HttpConnectionPool.releaseConnection(uri.getHost(),uri.getPort(), c);
-		}
+		
+		HttpConnectionPool.releaseConnection(uri.getHost(),uri.getPort(), c);
+		
 		
 		return new TaskAsyncResult("success",t,this);
 	}
