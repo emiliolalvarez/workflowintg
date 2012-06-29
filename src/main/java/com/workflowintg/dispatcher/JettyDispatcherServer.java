@@ -3,8 +3,6 @@ package com.workflowintg.dispatcher;
 import org.eclipse.jetty.server.Server;
 
 import com.myworkflow.main.Configuration;
-import com.myworkflow.transition.Transition;
-import com.myworkflow.workflow.TransitionDefinition;
 import com.workflowintg.context.AdContext;
 import com.workflowintg.dispatcher.rest.GuiceServletConfig;
 import com.workflowintg.dispatcher.rest.JettyLauncher;

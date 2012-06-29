@@ -5,7 +5,6 @@ import java.beans.PropertyVetoException;
 import com.google.inject.Inject;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.myworkflow.main.Configuration;
-import com.workflowintg.dispatcher.rest.GuiceServletConfig;
 
 public class DbPool {
 

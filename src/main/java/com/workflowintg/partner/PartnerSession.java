@@ -3,13 +3,13 @@ package com.workflowintg.partner;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 
 import com.myworkflow.workflow.Workflow;
 import com.myworkflow.workflow.WorkflowObserver;
-import com.sun.istack.logging.Logger;
 import com.workflowintg.ad.AdWorkflow;
 import com.workflowintg.dispatcher.rest.GuiceServletConfig;
 import com.workflowintg.task.TaskDownloadFile;

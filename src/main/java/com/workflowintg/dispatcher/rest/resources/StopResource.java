@@ -8,8 +8,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
-import com.workflowintg.dispatcher.JettyDispatcherServer;
-
 @Path("/stop")
 @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 public class StopResource {

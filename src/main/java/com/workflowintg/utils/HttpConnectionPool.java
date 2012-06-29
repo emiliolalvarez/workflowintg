@@ -5,82 +5,91 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
-import org.xlightweb.client.HttpClient;
-import org.xlightweb.client.HttpClient.FollowsRedirectMode;
-import org.xlightweb.client.MyHttpClient;
-
-import com.sun.istack.logging.Logger;
+import org.apache.http.HttpHost;
+import org.apache.http.conn.routing.HttpRoute;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.pool.PoolStats;
+import org.apache.log4j.Logger;
 
 public class HttpConnectionPool {
-	
+
 	private final static int MAX_CONCURRENT_DOMAINS = 3;
-	private final static int MAX_CONNECTIONS_PER_DOMAIN = 2;
-	private static Map<String,BlockingQueue<MyHttpClient>> pool = new HashMap<String, BlockingQueue<MyHttpClient>>();
+	private final static int MAX_CONNECTIONS_PER_DOMAIN = 10;
+	private static Map<String, PoolingClientConnectionManager> pool = new HashMap<String, PoolingClientConnectionManager>();
 	private static List<String> list = new LinkedList<String>();
 	private static Logger LOGGER = Logger.getLogger(HttpConnectionPool.class);
 
-	public synchronized static String getinfo(){
+	public static Map<String, PoolingClientConnectionManager> getPools() {
+		return pool;
+	}
+
+	public synchronized static String getinfo() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("HTTP CONNECTION POOL STATUS\n");
 		sb.append("--------------------------------------------\n");
-		for(String k:pool.keySet()){
-			BlockingQueue<MyHttpClient> q = pool.get(k);
-			int totalActive=0,totalCreated=0,totalDestroyed=0;
-			sb.append(k+":\n");
-			sb.append("-------------------------------------------------------------------"+"\n");
-			sb.append("Clients queued:"+q.size()+"\n");
-			for(HttpClient c:q){
-				totalActive+=c.getNumActive();
-				totalCreated+=c.getNumCreated();
-				totalDestroyed=c.getNumDestroyed();
-			}
-			sb.append("Active: "+totalActive+"\n");
-			sb.append("Created: "+totalCreated+"\n");
-			sb.append("Destroyed: "+totalDestroyed+"\n");
+		for (String k : pool.keySet()) {
+			PoolingClientConnectionManager q = pool.get(k);
+			PoolStats stats = q.getTotalStats();
+			stats.getAvailable();
+			sb.append(k + ":\n");
+			sb.append("----------------------------"
+					+ "---------------------------------------" + "\n");
+			sb.append("Available:" + stats.getAvailable() + "\n");
+			sb.append("Leased:" + stats.getLeased() + "\n");
+			sb.append("Pending:" + stats.getPending() + "\n");
+			sb.append("Max:" + stats.getMax() + "\n");
 			sb.append("\n\n");
 		}
 		return sb.toString();
 	}
-	
-	public static synchronized BlockingQueue<MyHttpClient> getConnectionPool(String domain,int port) throws IOException{
+
+	public static synchronized PoolingClientConnectionManager getConnectionPool(
+			String domain, int port) throws IOException {
+
+		port = port < 0 ? 80 : port;
 		String key = buildPoolKey(domain, port);
-		if(!pool.containsKey(key)){
-			if(pool.size()==MAX_CONCURRENT_DOMAINS){
-				pool.remove(list.remove(pool.size()-1));
+
+		if (!pool.containsKey(key)) {
+			if (pool.size() == MAX_CONCURRENT_DOMAINS) {
+				pool.remove(list.remove(pool.size() - 1));
 			}
-			BlockingQueue<MyHttpClient> connections = new LinkedBlockingQueue<MyHttpClient>();
-			for(int i=0;i<MAX_CONNECTIONS_PER_DOMAIN;i++){
-				MyHttpClient client = new MyHttpClient();
-				client.setFollowsRedirectMode(FollowsRedirectMode.ALL);
-				client.setMaxRedirects(5);
-				client.setMaxRetries(3);
-				client.setMaxActivePerServer(1);
-				//client.setMaxActive(1);
-				//client.setMaxIdle(0);
-				client.setConnectTimeoutMillis(2000);
-				connections.add(client);
+
+			SchemeRegistry schemeRegistry = new SchemeRegistry();
+
+			switch (port) {
+			case 443:
+				schemeRegistry.register(new Scheme("https", port,
+						SSLSocketFactory.getSocketFactory()));
+				break;
+			default:
+				schemeRegistry.register(new Scheme("http", port,
+						PlainSocketFactory.getSocketFactory()));
+				break;
 			}
-			pool.put(key, connections);
-			list.add(0,key);
+
+			PoolingClientConnectionManager cm = new PoolingClientConnectionManager(
+					schemeRegistry);
+			cm.setMaxTotal(MAX_CONNECTIONS_PER_DOMAIN);
+			cm.setDefaultMaxPerRoute(MAX_CONNECTIONS_PER_DOMAIN);
+			HttpHost host = new HttpHost(domain, port);
+			cm.setMaxPerRoute(new HttpRoute(host), MAX_CONNECTIONS_PER_DOMAIN);
+			LOGGER.info("CONNECTION POOL CREATED FOR " + domain + ":" + port);
+			pool.put(key, cm);
+			list.add(0, key);
 		}
-		BlockingQueue<MyHttpClient> q = pool.get(key);
+		PoolingClientConnectionManager q = pool.get(key);
 		return q;
 	}
-	
-	
-	public static synchronized void releaseConnection(String domain, int port,MyHttpClient c){
-		String key = buildPoolKey(domain, port);
-		pool.get(key).add(c);
-		LOGGER.info("CONNECTION RELEASED ON POOL ["+key+"]");
-	}
-	
-	private static String buildPoolKey(String domain,int port){
-		port = port<0?80:port;
-		String key = domain+":"+port;
+
+	private static String buildPoolKey(String domain, int port) {
+		port = port < 0 ? 80 : port;
+		String key = domain + ":" + port;
 		return key;
 	}
-	
+
 }

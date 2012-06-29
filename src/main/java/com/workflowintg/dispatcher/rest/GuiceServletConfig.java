@@ -15,7 +15,7 @@ import com.sun.jersey.core.util.FeaturesAndProperties;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.workflowintg.context.AdContext;
-import com.workflowintg.context.AdContextProvider;
+//import com.workflowintg.context.AdContextProvider;
 import com.workflowintg.context.AdTransitionDefinition;
 import com.workflowintg.db.DbPool;
 import com.workflowintg.dispatcher.RequestQueue;
